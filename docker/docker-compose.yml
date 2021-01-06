@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  DDDForumpostgres:
+    container_name: DDDForum
+    image: postgres:10.7
+    ports:
+      - "9999:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: forum1
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=C"
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
