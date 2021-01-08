@@ -1,5 +1,6 @@
 package helper
 
+import domain.entity.comment.Comment
 import domain.entity.post.Post
 import domain.entity.user.User
 import io.circe.generic.encoding.DerivedAsObjectEncoder
@@ -31,6 +32,9 @@ object Circe {
 
       implicit val postEncoder: Encoder[Post] = deriveEncoder[Post]
       implicit val postDecoder: Decoder[Post] = deriveDecoder[Post]
+
+      implicit val commentEncoder: Encoder[Comment] = deriveEncoder[Comment]
+      implicit val commentDecoder: Decoder[Comment] = deriveDecoder[Comment]
     }
 
     object CoercibleDoobieCodec {

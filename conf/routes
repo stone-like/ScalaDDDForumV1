@@ -10,5 +10,8 @@ PUT  /users controllers.UserController.update
 POST /posts controllers.PostController.create
 PUT  /posts controllers.PostController.update
 
+POST /comments controllers.CommentController.create
+PUT  /comments controllers.CommentController.update
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
