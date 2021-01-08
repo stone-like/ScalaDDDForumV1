@@ -10,22 +10,11 @@ import domain.entity.user.UserSpecification.validateUser
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import suite.{PostgresSuite, ResourceSuite}
+import cats.implicits._
+import cats.data._
 
 //DockerをつかってやるならH2のinmemoryとかはいらなさそう、inMemoryを使うなら開始時にDBのsettingがいるから結局evolveを使いそう
 class UserRepositorySpec extends PostgresSuite{
-//  val resources: Resource[IO, HikariTransactor[IO]] =
-//    for {
-//      ce <- ExecutionContexts.fixedThreadPool[IO](32) // our connect EC
-//      be <- Blocker[IO] // our blocking EC
-//      xa <- HikariTransactor.newHikariTransactor[IO](
-//        "org.postgresql.Driver",                        // driver classname
-//        "jdbc:postgresql://localhost:9999/forum1",   // connect URL
-//        "root",                                   // username
-//        "root",                                     // password
-//        ce,                                     // await connection here
-//        be                                      // execute JDBC operations here
-//      )
-//    } yield xa
 
   val repo = new DoobieUserRepository
 //  //これテスト遅いしevolvingつかってinmemorytestした方がいい気もするけど・・・
@@ -36,7 +25,7 @@ class UserRepositorySpec extends PostgresSuite{
     implicit val idGenerator: EntityIdGenerator = new FakeIdGenerator
     "findById" in {
 
-      val user = validateUser("test", "password", "dummy@email.com").toEither
+      val user = validateUser("test", "dummy@email.com","password").toEither
         .map((userData) => UserFactory.create(userData._1, userData._2, userData._3))
 
       //これControllerなりServiceなりKleisliのrunを使うところではF[_]:Kleisliとしてあげないといけないっぽい
@@ -56,6 +45,18 @@ class UserRepositorySpec extends PostgresSuite{
        }
 
      }
+
+    }
+
+    "updateUser" in {
+      for{
+        userData <- validateUser("updated","updated@email.com","updatedP").toEither
+        user <- repo.findById("1").run(transactor).unsafeRunSync() //eitherのレーン
+        _ <- Either.right(repo.update(user.changeUser(userData._1,userData._2,userData._3)).run(transactor).unsafeRunSync())
+        updatedUser <- repo.findById("1").run(transactor).unsafeRunSync()
+      } yield assert("updated" == updatedUser.name.value.value)
+
+
 
     }
   }

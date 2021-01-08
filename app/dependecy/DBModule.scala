@@ -5,6 +5,6 @@ import com.softwaremill.macwire.wire
 import helper.db.{IOContextManager, IOContextManagerOnDoobie}
 import helper.db.IOContextManagerOnDoobie.DoobieCtx
 
-class DBModule {
+object DBModule {
   lazy val ioContext:IOContextManager[IO,DoobieCtx] = wire[IOContextManagerOnDoobie]
 }

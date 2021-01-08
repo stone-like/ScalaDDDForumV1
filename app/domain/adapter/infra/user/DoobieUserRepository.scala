@@ -12,7 +12,7 @@ import helper.Circe.CoercibleDoobieCodec._
 //Serviceとかで複数つなげるときに一個一個transactとやってたら別々のtransactionになってしまうっぽいのが・・・
 //それもあとでやる(機能自体はしているので)
 class DoobieUserRepository extends UserRepository[KleisliDoobie]{
-
+  //とりあえずsql関連で発生するエラーは拾わないようにする
   override def findById(id:String):KleisliDoobie[Either[UserNotFound,User]] = {
     Kleisli{
       implicit transactor =>
@@ -42,6 +42,21 @@ class DoobieUserRepository extends UserRepository[KleisliDoobie]{
 
         sql"""insert into users (id,name,email,password)
               values ($id,$name,$email,$password)""".stripMargin
+          .update
+          .run
+          .transact(transactor)
+    }
+  }
+
+  override def update(user: User): KleisliDoobie[Int] = {
+    Kleisli{
+      implicit transactor =>
+        val id = user.id.value
+        val name = user.name.value.value
+        val email = user.email.value.value
+        val password = user.password.value.value
+
+        sql"""update  users set name = $name ,email = $email , password = $password where id = $id""".stripMargin
           .update
           .run
           .transact(transactor)

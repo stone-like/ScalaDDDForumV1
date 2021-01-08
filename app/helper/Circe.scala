@@ -1,6 +1,8 @@
 package helper
 
+import domain.entity.post.Post
 import domain.entity.user.User
+import io.circe.generic.encoding.DerivedAsObjectEncoder
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.estatico.newtype.Coercible
@@ -26,6 +28,9 @@ object Circe {
       //ここに順次追加していく
       implicit val userEncoder: Encoder[User] = deriveEncoder[User]
       implicit val userDecoder: Decoder[User] = deriveDecoder[User]
+
+      implicit val postEncoder: Encoder[Post] = deriveEncoder[Post]
+      implicit val postDecoder: Decoder[Post] = deriveDecoder[Post]
     }
 
     object CoercibleDoobieCodec {
@@ -39,4 +44,5 @@ object Circe {
       /** derive an Eq instance for newtype N from Eq instance for Repr type R */
       implicit def coercibleEq[R, N](implicit ev: Coercible[Eq[R], Eq[N]], R: Eq[R]): Eq[N] = ev(R)
     }
+
 }

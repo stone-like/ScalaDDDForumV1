@@ -80,6 +80,9 @@ package object user {
   }
 
 
+  case class CreateUserParam(name:String,email:String,password:String)
+  case class UpdateUserParam(id:String,name:String,email:String,password:String)
+
   //ValidateNel[DomainError,User]とする
   //fix createとか特定のメソッドでしか生成できないようにしないと、せっかくバリデーションしても、別メソッドで作られてしまうので、そこには注意
   //例えばEmail()としただけでは

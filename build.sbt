@@ -4,7 +4,7 @@ version := "0.1"
 scalaVersion := "2.13.3"
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
-
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 scalacOptions ++= Seq(
   //  "-Xfatal-warnings",
   //  "-deprecation",
@@ -81,6 +81,8 @@ libraryDependencies ++= Seq(
 "com.opentable.components" % "otj-pg-embedded" % "0.13.3" % Test,
 //  "ru.yandex.qatools.embed" % "postgresql-embedded" % "2.10",
 "org.postgresql" % "postgresql" % "42.2.5"  % Test,
+
+
 )
 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.2"
@@ -93,3 +95,6 @@ libraryDependencies += "com.softwaremill.macwire" %% "macrosakka" % "2.3.6" % "p
 libraryDependencies += "com.softwaremill.macwire" %% "util" % "2.3.6"
 
 libraryDependencies += "com.softwaremill.macwire" %% "proxy" % "2.3.6"
+
+libraryDependencies += guice
+libraryDependencies += "com.dripower" %% "play-circe" % "2712.0"

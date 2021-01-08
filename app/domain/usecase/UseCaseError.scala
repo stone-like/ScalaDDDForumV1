@@ -2,7 +2,7 @@ package domain.usecase
 
 import cats.data.NonEmptyList
 
-case class UseCaseError(error: NonEmptyList[Throwable]) extends Throwable
+case class UseCaseError(error: NonEmptyList[Throwable])
 
 object UseCaseError {
   def create(message:Throwable): UseCaseError             = apply(NonEmptyList.one(message))

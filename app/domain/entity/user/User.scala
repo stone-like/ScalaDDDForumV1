@@ -4,7 +4,7 @@ import domain.entity.{Entity, EntityIdGenerator}
 
 //多分ユーザーはエラーを蓄積させた方が良さげ
 case class User(id:UserId,name:UserName,email:Email,password:Password){
-  def changeUser(name:UserName,password: Password,email: Email):User= {
+  def changeUser(name:UserName,email: Email,password: Password):User= {
     copy(name = name,password=password,email=email)
   }
 }
